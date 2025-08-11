@@ -139,10 +139,6 @@ app.use((req: Request, res: Response, next) => {
    next()
 })
 
-app.use("/status", (req, res) => {
-   res.json({ status: "operational" })
-})
-
 // Rota para o painel administrativo
 app.get('/admin', (req, res) => {
    res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'))
