@@ -7,9 +7,9 @@ import apifunctions from "../functions/apifunctions"
 import allfunctions from "../functions/allfunctions"
 
 // Admin credentials (em produção, isso deveria vir do banco de dados)
-const ADMIN_USERNAME = "admin"
-// new hash for 'admin123'
-const ADMIN_PASSWORD = "$2b$10$sIHbn4OLLFEh6.URUFrdbuf.f3D.tlKdgg1qUqDH/IzcB6hyVco4a"
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin"
+// Hash de senha BCrypt para 'admin123' por padrão, mas pode ser sobrescrito via .env ADMIN_PASSWORD_HASH
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD_HASH || "$2b$10$sIHbn4OLLFEh6.URUFrdbuf.f3D.tlKdgg1qUqDH/IzcB6hyVco4a"
 
 export default {
    // ===== AUTENTICAÇÃO =====
