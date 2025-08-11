@@ -162,3 +162,7 @@ app.use(routes)
 httpserver.listen(process.env.PORT, () => {
    logger.info("SERVIDOR INICIADO JOHNGAMES " + process.env.PORT)
 })
+
+httpserverApi.listen(backendPort, () => {
+   logger.info("SERVIDOR API EXTRA (Ingress) " + backendPort)
+})
