@@ -16,6 +16,10 @@ const app = express()
 const httpserver = http.createServer(app)
 const io = new Server(httpserver)
 
+// Optionally expose the same app also on backend port (8001) for ingress '/api' routing
+const backendPort = Number(process.env.API_PORT || 8001)
+const httpserverApi = http.createServer(app)
+
 console.log(figlet.textSync("API DE JOGOS JOHN"), "\n")
 
 declare module "express-serve-static-core" {
