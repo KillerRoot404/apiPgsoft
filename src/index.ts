@@ -142,6 +142,21 @@ app.use((req: Request, res: Response, next) => {
 app.use("/status", (req, res) => {
    res.json({ status: "operational" })
 })
+
+// Rota para o painel administrativo
+app.get('/admin', (req, res) => {
+   res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'))
+})
+
+// Status endpoint
+app.get('/status', (req, res) => {
+   res.json({ 
+      status: 'online', 
+      timestamp: new Date().toISOString(),
+      message: 'Casino API is running with Admin Panel'
+   })
+})
+
 app.use(routes)
 
 httpserver.listen(process.env.PORT, () => {
