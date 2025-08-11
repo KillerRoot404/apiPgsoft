@@ -15,6 +15,7 @@ import doublefortune from "./controllers/double-fortune/doublefortune"
 import ganeshagold from "./controllers/ganesha-gold/ganeshagold"
 import dragontigerluck from "./controllers/dragon-tiger-luck/dragontigerluck"
 
+import mockgoldapi from "./controllers/mockgoldapi"
 const routes = Router()
 
 //CONTROLLER SESSION
