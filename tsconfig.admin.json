@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "noEmitOnError": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/index.ts",
+    "src/routes.ts",
+    "src/controllers/admincontroller.ts",
+    "src/middleware/adminAuth.ts",
+    "src/functions/**/*.ts",
+    "src/database/**/*.ts",
+    "src/logger/**/*.ts",
+    "src/serverEvents.ts"
+  ],
+  "exclude": [
+    "src/controllers/**/!(admincontroller).ts",
+    "src/controllers/**/**.ts",
+    "src/jsons/**",
+    "src/controllers/**/*fortune*.ts",
+    "src/controllers/**/*dragon*.ts",
+    "src/controllers/**/*bikini*.ts"
+  ]
+}
