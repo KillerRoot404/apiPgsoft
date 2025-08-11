@@ -5,7 +5,7 @@
    "license": "MIT",
    "scripts": {
       "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-      "build": "tsc",
+      "build": "tsc -p tsconfig.admin.json && mkdir -p dist/public && cp -r src/public/* dist/public/",
       "postbuild": "mkdir -p dist/public && cp -r src/public/* dist/public/",
       "start": "node dist/indexprod.js"
    },
