@@ -132,7 +132,7 @@ app.use(
          "script-src": ["'self'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
          "script-src-attr": "'none'",
          "style-src": ["'self'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
-         "connect-src": ["'self'"]
+         "connect-src": ["'self'", "ws:", "wss:"]
       },
    }),
 )
