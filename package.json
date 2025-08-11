@@ -6,6 +6,7 @@
    "scripts": {
       "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
       "build": "tsc",
+      "postbuild": "mkdir -p dist/public && cp -r src/public/* dist/public/",
       "start": "node dist/indexprod.js"
    },
    "dependencies": {

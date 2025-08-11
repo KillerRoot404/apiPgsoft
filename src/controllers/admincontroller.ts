@@ -63,7 +63,7 @@ export default {
    // ===== DASHBOARD ESTATÍSTICAS =====
    async getDashboardStats(req: Request, res: Response) {
       try {
-         const agents = await apifunctions.getagentbyagentToken("")
+         const agents = await allfunctions.getAllAgents()
          const users = await allfunctions.getAllUsers()
          
          const stats = {

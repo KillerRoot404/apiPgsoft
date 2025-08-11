@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<![CDATA[<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -199,7 +199,7 @@
                 <div class="container-fluid">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h1>Gestão de Agentes</h1>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agentModal">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agentModal" onclick="adminPanel.openCreateAgentModal()">
                             <i class="fas fa-plus me-2"></i>Novo Agente
                         </button>
                     </div>
@@ -343,11 +343,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Novo Agente</h5>
+                    <h5 class="modal-title" id="agentModalTitle">Novo Agente</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="agentForm">
+                        <input type="hidden" id="agentId" />
                         <div class="mb-3">
                             <label for="agentCode" class="form-label">Código do Agente</label>
                             <input type="text" class="form-control" id="agentCode" required>
@@ -361,8 +362,43 @@
                             <input type="text" class="form-control" id="secretKey" required>
                         </div>
                         <div class="mb-3">
+                            <label for="saldo" class="form-label">Saldo</label>
+                            <input type="number" step="0.01" class="form-control" id="saldo" value="0">
+                        </div>
+                        <div class="mb-3">
                             <label for="callbackUrl" class="form-label">Callback URL</label>
                             <input type="url" class="form-control" id="callbackUrl">
+                        </div>
+                        <hr/>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="probganho" class="form-label">Prob. Ganho</label>
+                                <input type="text" class="form-control" id="probganho">
+                            </div>
+                            <div class="col-6">
+                                <label for="probbonus" class="form-label">Prob. Bônus</label>
+                                <input type="text" class="form-control" id="probbonus">
+                            </div>
+                            <div class="col-6">
+                                <label for="probganhortp" class="form-label">Prob. Ganho RTP</label>
+                                <input type="text" class="form-control" id="probganhortp">
+                            </div>
+                            <div class="col-6">
+                                <label for="probganhoinfluencer" class="form-label">Prob. Ganho Influencer</label>
+                                <input type="text" class="form-control" id="probganhoinfluencer">
+                            </div>
+                            <div class="col-6">
+                                <label for="probbonusinfluencer" class="form-label">Prob. Bônus Influencer</label>
+                                <input type="text" class="form-control" id="probbonusinfluencer">
+                            </div>
+                            <div class="col-6">
+                                <label for="probganhoaposta" class="form-label">Prob. Ganho Aposta</label>
+                                <input type="text" class="form-control" id="probganhoaposta">
+                            </div>
+                            <div class="col-6">
+                                <label for="probganhosaldo" class="form-label">Prob. Ganho Saldo</label>
+                                <input type="text" class="form-control" id="probganhosaldo">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -374,9 +410,39 @@
         </div>
     </div>
 
+    <!-- User Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Usuário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2"><strong>ID:</strong> <span id="u_id"></span></div>
+                    <div class="mb-2"><strong>Username:</strong> <span id="u_username"></span></div>
+                    <div class="mb-2"><strong>Saldo:</strong> <span id="u_saldo"></span></div>
+                    <div class="mb-2"><strong>Valor Apostado:</strong> <span id="u_valorapostado"></span></div>
+                    <div class="mb-2"><strong>Valor Ganho:</strong> <span id="u_valorganho"></span></div>
+                    <div class="mb-2"><strong>RTP:</strong> <span id="u_rtp"></span></div>
+                    <hr/>
+                    <div class="mb-3">
+                        <label for="u_new_balance" class="form-label">Atualizar Saldo</label>
+                        <input type="number" step="0.01" class="form-control" id="u_new_balance">
+                        <input type="hidden" id="u_hidden_id">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="adminPanel.updateUserBalanceFromModal()">Salvar Saldo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/admin.js"></script>
 </body>
-</html>
+</html>]]>

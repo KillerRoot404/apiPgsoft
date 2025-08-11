@@ -5,6 +5,7 @@ class AdminPanel {
         this.token = localStorage.getItem('adminToken')
         this.currentSection = 'dashboard'
         this.charts = {}
+        this.mode = 'create' // create | edit for agent modal
         this.init()
     }
 
@@ -227,6 +228,104 @@ class AdminPanel {
         }
     }
 
+    async openCreateAgentModal() {
+        this.mode = 'create'
+        document.getElementById('agentModalTitle').textContent = 'Novo Agente'
+        document.getElementById('agentForm').reset()
+        document.getElementById('agentId').value = ''
+    }
+
+    async editAgent(id) {
+        // fetch agents and find the one by id
+        const data = await this.apiRequest('/api/admin/agents')
+        if (data && data.success) {
+            const agent = data.data.find(a => a.id === id)
+            if (!agent) return this.showAlert('Agente não encontrado', 'error')
+
+            this.mode = 'edit'
+            document.getElementById('agentModalTitle').textContent = `Editar Agente #${id}`
+            document.getElementById('agentId').value = agent.id
+            document.getElementById('agentCode').value = agent.agentCode || ''
+            document.getElementById('agentToken').value = agent.agentToken || ''
+            document.getElementById('secretKey').value = agent.secretKey || ''
+            document.getElementById('saldo').value = agent.saldo || 0
+            document.getElementById('callbackUrl').value = agent.callbackurl || ''
+
+            document.getElementById('probganho').value = agent.probganho || ''
+            document.getElementById('probbonus').value = agent.probbonus || ''
+            document.getElementById('probganhortp').value = agent.probganhortp || ''
+            document.getElementById('probganhoinfluencer').value = agent.probganhoinfluencer || ''
+            document.getElementById('probbonusinfluencer').value = agent.probbonusinfluencer || ''
+            document.getElementById('probganhoaposta').value = agent.probganhoaposta || ''
+            document.getElementById('probganhosaldo').value = agent.probganhosaldo || ''
+
+            const modal = new bootstrap.Modal(document.getElementById('agentModal'))
+            modal.show()
+        }
+    }
+
+    async saveAgent() {
+        const agentData = {
+            agentCode: document.getElementById('agentCode').value,
+            agentToken: document.getElementById('agentToken').value,
+            secretKey: document.getElementById('secretKey').value,
+            saldo: parseFloat(document.getElementById('saldo').value || '0'),
+            callbackurl: document.getElementById('callbackUrl').value,
+            probganho: document.getElementById('probganho').value,
+            probbonus: document.getElementById('probbonus').value,
+            probganhortp: document.getElementById('probganhortp').value,
+            probganhoinfluencer: document.getElementById('probganhoinfluencer').value,
+            probbonusinfluencer: document.getElementById('probbonusinfluencer').value,
+            probganhoaposta: document.getElementById('probganhoaposta').value,
+            probganhosaldo: document.getElementById('probganhosaldo').value
+        }
+
+        if (this.mode === 'edit') {
+            const id = document.getElementById('agentId').value
+            const data = await this.apiRequest(`/api/admin/agents/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(agentData)
+            })
+            if (data && data.success) {
+                this.showAlert('Agente atualizado com sucesso!', 'success')
+                bootstrap.Modal.getInstance(document.getElementById('agentModal')).hide()
+                this.loadAgents()
+            } else {
+                this.showAlert(data ? data.message : 'Erro ao atualizar agente', 'error')
+            }
+        } else {
+            // create
+            const data = await this.apiRequest('/api/admin/agents', {
+                method: 'POST',
+                body: JSON.stringify(agentData)
+            })
+
+            if (data && data.success) {
+                this.showAlert('Agente criado com sucesso!', 'success')
+                bootstrap.Modal.getInstance(document.getElementById('agentModal')).hide()
+                document.getElementById('agentForm').reset()
+                this.loadAgents()
+            } else {
+                this.showAlert(data ? data.message : 'Erro ao criar agente', 'error')
+            }
+        }
+    }
+
+    async deleteAgent(id) {
+        if (confirm('Tem certeza que deseja excluir este agente?')) {
+            const data = await this.apiRequest(`/api/admin/agents/${id}`, {
+                method: 'DELETE'
+            })
+
+            if (data && data.success) {
+                this.showAlert('Agente excluído com sucesso!', 'success')
+                this.loadAgents()
+            } else {
+                this.showAlert(data ? data.message : 'Erro ao excluir agente', 'error')
+            }
+        }
+    }
+
     async loadUsers(page = 1) {
         const data = await this.apiRequest(`/api/admin/users?page=${page}&limit=20`)
         
@@ -280,41 +379,40 @@ class AdminPanel {
         }
     }
 
-    async saveAgent() {
-        const agentData = {
-            agentCode: document.getElementById('agentCode').value,
-            agentToken: document.getElementById('agentToken').value,
-            secretKey: document.getElementById('secretKey').value,
-            callbackUrl: document.getElementById('callbackUrl').value
-        }
-
-        const data = await this.apiRequest('/api/admin/agents', {
-            method: 'POST',
-            body: JSON.stringify(agentData)
-        })
-
+    async viewUser(id) {
+        const data = await this.apiRequest(`/api/admin/users/${id}`)
         if (data && data.success) {
-            this.showAlert('Agente criado com sucesso!', 'success')
-            bootstrap.Modal.getInstance(document.getElementById('agentModal')).hide()
-            document.getElementById('agentForm').reset()
-            this.loadAgents()
-        } else {
-            this.showAlert(data ? data.message : 'Erro ao criar agente', 'error')
+            const u = data.data
+            document.getElementById('u_hidden_id').value = u.id
+            document.getElementById('u_id').textContent = u.id
+            document.getElementById('u_username').textContent = u.username
+            document.getElementById('u_saldo').textContent = this.formatCurrency(u.saldo)
+            document.getElementById('u_valorapostado').textContent = this.formatCurrency(u.valorapostado)
+            document.getElementById('u_valorganho').textContent = this.formatCurrency(u.valorganho)
+            document.getElementById('u_rtp').textContent = this.formatPercentage(u.rtp)
+            document.getElementById('u_new_balance').value = u.saldo
+
+            const modal = new bootstrap.Modal(document.getElementById('userModal'))
+            modal.show()
         }
     }
 
-    async deleteAgent(id) {
-        if (confirm('Tem certeza que deseja excluir este agente?')) {
-            const data = await this.apiRequest(`/api/admin/agents/${id}`, {
-                method: 'DELETE'
-            })
+    async updateUserBalanceFromModal() {
+        const id = document.getElementById('u_hidden_id').value
+        const newBalance = parseFloat(document.getElementById('u_new_balance').value)
+        if (isNaN(newBalance)) return this.showAlert('Saldo inválido', 'error')
 
-            if (data && data.success) {
-                this.showAlert('Agente excluído com sucesso!', 'success')
-                this.loadAgents()
-            } else {
-                this.showAlert(data ? data.message : 'Erro ao excluir agente', 'error')
-            }
+        const data = await this.apiRequest(`/api/admin/users/${id}/balance`, {
+            method: 'PUT',
+            body: JSON.stringify({ balance: newBalance })
+        })
+
+        if (data && data.success) {
+            this.showAlert('Saldo atualizado com sucesso!', 'success')
+            bootstrap.Modal.getInstance(document.getElementById('userModal')).hide()
+            this.loadUsers()
+        } else {
+            this.showAlert(data ? data.message : 'Erro ao atualizar saldo', 'error')
         }
     }
 
