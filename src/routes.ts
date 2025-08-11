@@ -16,7 +16,23 @@ import ganeshagold from "./controllers/ganesha-gold/ganeshagold"
 import dragontigerluck from "./controllers/dragon-tiger-luck/dragontigerluck"
 
 import mockgoldapi from "./controllers/mockgoldapi"
+import admincontroller from "./controllers/admincontroller"
+import adminAuth from "./middleware/adminAuth"
+
 const routes = Router()
+
+//ADMIN ROUTES
+routes.post("/api/admin/login", admincontroller.login)
+routes.get("/api/admin/dashboard/stats", adminAuth, admincontroller.getDashboardStats)
+routes.get("/api/admin/agents", adminAuth, admincontroller.getAllAgents)
+routes.post("/api/admin/agents", adminAuth, admincontroller.createAgent)
+routes.put("/api/admin/agents/:id", adminAuth, admincontroller.updateAgent)
+routes.delete("/api/admin/agents/:id", adminAuth, admincontroller.deleteAgent)
+routes.get("/api/admin/users", adminAuth, admincontroller.getAllUsers)
+routes.get("/api/admin/users/:id", adminAuth, admincontroller.getUserDetails)
+routes.put("/api/admin/users/:id/balance", adminAuth, admincontroller.updateUserBalance)
+routes.get("/api/admin/reports/financial", adminAuth, admincontroller.getFinancialReport)
+routes.get("/api/admin/reports/games", adminAuth, admincontroller.getGameReport)
 
 //CONTROLLER SESSION
 routes.post("/web-api/game-proxy/v2/Resources/GetByResourcesTypeIds", sessioncontroller.resourcetypeids)
