@@ -24,6 +24,10 @@ routes.post("/web-api/game-proxy/v2/Resources/GetByResourcesTypeIds", sessioncon
 //API CONTROLLERS
 routes.post("/api/v1/game_launch", apicontroller.launchgame)
 routes.post("/api/v1/getagent", apicontroller.getagent)
+// MOCK GOLD API for testing
+routes.post("/gold_api/user_balance", mockgoldapi.userBalance)
+routes.post("/gold_api/game_callback", mockgoldapi.gameCallback)
+
 routes.post("/api/v1/attagent", apicontroller.attagent)
 
 //GAMES CONTROLLERS ROUTES
