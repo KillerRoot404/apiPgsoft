@@ -343,7 +343,7 @@ export default {
          // Relatório de jogos mais populares baseado em calls
          const gameCalls = await allfunctions.getGameCallsStats()
 
-         const gameNames = {
+         const gameNames: { [key: string]: string } = {
             "fortune-tiger": "Fortune Tiger",
             "fortune-ox": "Fortune Ox", 
             "fortune-dragon": "Fortune Dragon",
