@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Casino API</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-lock me-2"></i>Login Administrativo
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuário</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Entrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" style="display: none;">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-gamepad me-2"></i>Casino Admin</h3>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="agents">
+                        <i class="fas fa-users me-2"></i>Agentes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="users">
+                        <i class="fas fa-user-friends me-2"></i>Usuários
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="games">
+                        <i class="fas fa-dice me-2"></i>Jogos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="reports">
+                        <i class="fas fa-chart-bar me-2"></i>Relatórios
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a class="nav-link text-danger" href="#" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt me-2"></i>Sair
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div id="content">
+            <!-- Header -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-outline-primary">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="navbar-nav ms-auto">
+                        <span class="navbar-text">
+                            <i class="fas fa-user-shield me-2"></i>
+                            Bem-vindo, <strong id="adminUsername">Admin</strong>
+                        </span>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div class="container-fluid">
+                    <h1 class="mb-4">Dashboard</h1>
+                    
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card bg-primary text-white">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Agentes</div>
+                                            <div class="h5 mb-0 font-weight-bold" id="totalAgents">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card bg-success text-white">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Usuários</div>
+                                            <div class="h5 mb-0 font-weight-bold" id="totalUsers">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-friends fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Saldo Total</div>
+                                            <div class="h5 mb-0 font-weight-bold" id="totalBalance">R$ 0,00</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card bg-warning text-white">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">RTP Médio</div>
+                                            <div class="h5 mb-0 font-weight-bold" id="avgRTP">0%</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-percentage fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-area me-1"></i>
+                                    Visão Geral Financeira
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="revenueChart" width="100%" height="40"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-pie me-1"></i>
+                                    Jogos Populares
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="gamesChart" width="100%" height="50"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agents Section -->
+            <div id="agents-section" class="content-section">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1>Gestão de Agentes</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agentModal">
+                            <i class="fas fa-plus me-2"></i>Novo Agente
+                        </button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="agentsTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Código</th>
+                                            <th>Token</th>
+                                            <th>Saldo</th>
+                                            <th>Callback URL</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users-section" class="content-section">
+                <div class="container-fluid">
+                    <h1 class="mb-4">Gestão de Usuários</h1>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="usersTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Username</th>
+                                            <th>Saldo</th>
+                                            <th>Valor Apostado</th>
+                                            <th>Valor Ganho</th>
+                                            <th>RTP</th>
+                                            <th>Agent ID</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <nav aria-label="Navegação de usuários">
+                                <ul class="pagination justify-content-center" id="usersPagination">
+                                    <!-- Populated via JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games Section -->
+            <div id="games-section" class="content-section">
+                <div class="container-fluid">
+                    <h1 class="mb-4">Controle de Jogos</h1>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-dragon fa-3x text-warning mb-3"></i>
+                                    <h5>Fortune Tiger</h5>
+                                    <p class="text-muted">Jogo mais popular</p>
+                                    <button class="btn btn-sm btn-outline-primary">Configurar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-dragon fa-3x text-success mb-3"></i>
+                                    <h5>Fortune Dragon</h5>
+                                    <p class="text-muted">Alto RTP</p>
+                                    <button class="btn btn-sm btn-outline-primary">Configurar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-paw fa-3x text-info mb-3"></i>
+                                    <h5>Fortune Mouse</h5>
+                                    <p class="text-muted">Crescimento rápido</p>
+                                    <button class="btn btn-sm btn-outline-primary">Configurar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports-section" class="content-section">
+                <div class="container-fluid">
+                    <h1 class="mb-4">Relatórios</h1>
+                    
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-chart-line me-2"></i>Relatório Financeiro</h5>
+                                </div>
+                                <div class="card-body" id="financialReport">
+                                    <!-- Populated via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fas fa-gamepad me-2"></i>Relatório de Jogos</h5>
+                                </div>
+                                <div class="card-body" id="gameReport">
+                                    <!-- Populated via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Modal -->
+    <div class="modal fade" id="agentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Agente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="agentForm">
+                        <div class="mb-3">
+                            <label for="agentCode" class="form-label">Código do Agente</label>
+                            <input type="text" class="form-control" id="agentCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="agentToken" class="form-label">Agent Token</label>
+                            <input type="text" class="form-control" id="agentToken" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="secretKey" class="form-label">Secret Key</label>
+                            <input type="text" class="form-control" id="secretKey" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="callbackUrl" class="form-label">Callback URL</label>
+                            <input type="url" class="form-control" id="callbackUrl">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveAgent">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./js/admin.js"></script>
+</body>
+</html>
