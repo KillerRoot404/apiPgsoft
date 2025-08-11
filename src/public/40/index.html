@@ -28,7 +28,7 @@
 
     <title>Jungle Delight</title>
     <script>
-        const host_name = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+        const host_name = window.location.origin;
         const socket = io(host_name);
 
         const params = new URLSearchParams(window.location.search);
