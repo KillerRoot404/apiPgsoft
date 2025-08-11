@@ -144,9 +144,6 @@ app.use("/status", (req, res) => {
 })
 app.use(routes)
 
-httpserver.listen(443, () => {
-   logger.info("SERVIDOR INICIADO JOHNGAMES " + 443)
-})
-httserver.listen(process.env.PORT, () => {
+httpserver.listen(process.env.PORT, () => {
    logger.info("SERVIDOR INICIADO JOHNGAMES " + process.env.PORT)
 })
