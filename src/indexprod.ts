@@ -130,15 +130,16 @@ app.use(
    helmet.contentSecurityPolicy({
       useDefaults: false,
       directives: {
-         "default-src": ["'none'"],
-         "base-uri": "'self'",
+         "default-src": ["'self'"],
+         "base-uri": ["'self'"],
+         "connect-src": ["'self'", "ws:", "wss:"],
          "font-src": ["'self'", "https:", "data:"],
          "frame-ancestors": ["'self'"],
          "img-src": ["'self'", "data:"],
          "object-src": ["'none'"],
-         "script-src": ["'self'", "https://cdnjs.cloudflare.com"],
+         "script-src": ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://cdn.socket.io"],
          "script-src-attr": "'none'",
-         "style-src": ["'self'", "https://cdnjs.cloudflare.com"],
+         "style-src": ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
       },
    }),
 )
