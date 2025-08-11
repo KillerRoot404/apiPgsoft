@@ -8,7 +8,8 @@ import allfunctions from "../functions/allfunctions"
 
 // Admin credentials (em produção, isso deveria vir do banco de dados)
 const ADMIN_USERNAME = "admin"
-const ADMIN_PASSWORD = "$2b$10$rOvLrm8YQj4x8YrJhJGZUOpZVaKKKPqF8FvZjTKKEaZKjKJZGUOpZ" // senha: admin123
+// new hash for 'admin123'
+const ADMIN_PASSWORD = "$2b$10$sIHbn4OLLFEh6.URUFrdbuf.f3D.tlKdgg1qUqDH/IzcB6hyVco4a"
 
 export default {
    // ===== AUTENTICAÇÃO =====
@@ -307,10 +308,10 @@ export default {
          const report = {
             totalRevenue: users.reduce((sum: number, user: any) => sum + (user.valorapostado || 0), 0),
             totalPayouts: users.reduce((sum: number, user: any) => sum + (user.valorganho || 0), 0),
-            totalProfit: users.reduce((sum: number, user: any) => sum + (user.valorapostado - user.valorganho || 0), 0),
+            totalProfit: users.reduce((sum: number, user: any) => sum + ((user.valorapostado || 0) - (user.valorganho || 0)), 0),
             userMetrics: {
                totalUsers: users.length,
-               activeUsers: users.filter((user: any) => user.valorapostado > 0).length,
+               activeUsers: users.filter((user: any) => (user.valorapostado || 0) > 0).length,
                avgBetPerUser: users.length > 0 ? users.reduce((sum: number, user: any) => sum + (user.valorapostado || 0), 0) / users.length : 0
             },
             agentMetrics: {
@@ -319,8 +320,8 @@ export default {
             },
             rtpAnalysis: {
                averageRTP: users.length > 0 ? users.reduce((sum: number, user: any) => sum + (user.rtp || 0), 0) / users.length : 0,
-               highRTPUsers: users.filter((user: any) => user.rtp > 95).length,
-               lowRTPUsers: users.filter((user: any) => user.rtp < 85).length
+               highRTPUsers: users.filter((user: any) => (user.rtp || 0) > 95).length,
+               lowRTPUsers: users.filter((user: any) => (user.rtp || 0) < 85).length
             }
          }
 
