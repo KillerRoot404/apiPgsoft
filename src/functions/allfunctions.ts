@@ -95,5 +95,37 @@ export default {
       `, [startDate])
       
       return res[0]
+   },
+
+   // ===== FUNÇÕES LEGACY PARA COMPATIBILIDADE =====
+   async getagentbyid(id: number) {
+      const res = await promisePool.query<RowDataPacket[]>(`SELECT * FROM agents WHERE id = ?`, [id])
+      return res[0]
+   },
+
+   async calcularganho(saldo: number, valorapostado: number, rtp: number) {
+      // Lógica simplificada de cálculo de ganho baseada no RTP
+      const ganho = (valorapostado * rtp) / 100
+      return ganho
+   },
+
+   async getcallbyid(id: number) {
+      const res = await promisePool.query<RowDataPacket[]>(`SELECT * FROM calls WHERE id = ?`, [id])
+      return res[0]
+   },
+
+   async updatestepscall(id: number, steps: number) {
+      const res = await promisePool.query<ResultSetHeader>("UPDATE calls SET steps = ? WHERE id = ?", [steps, id])
+      return res[0]
+   },
+
+   async completecall(id: number, aw: number) {
+      const res = await promisePool.query<ResultSetHeader>("UPDATE calls SET status = 'completed', aw = ? WHERE id = ?", [aw, id])
+      return res[0]
+   },
+
+   async subtrairstepscall(id: number) {
+      const res = await promisePool.query<ResultSetHeader>("UPDATE calls SET steps = steps - 1 WHERE id = ?", [id])
+      return res[0]
    }
 }
