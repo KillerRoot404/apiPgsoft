@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express"
 import helmet from "helmet"
 import cors from "cors"
-import fs from "fs"
-import https from "https"
 import http from "http"
 import logger from "./logger/index"
 import routes from "./routes"
@@ -14,15 +12,8 @@ import allfunctions from "./functions/allfunctions"
 import { emitirEventoInterno, adicionarListener } from "./serverEvents"
 import "dotenv/config"
 
-const privateKey = fs.readFileSync("server.key", "utf8")
-const certificate = fs.readFileSync("server.crt", "utf8")
-const credentials = {
-   key: privateKey,
-   cert: certificate,
-}
 const app = express()
-const httpserver = https.createServer(credentials, app)
-const httserver = http.createServer(app)
+const httpserver = http.createServer(app)
 const io = new Server(httpserver)
 
 console.log(figlet.textSync("API DE JOGOS JOHN"), "\n")
